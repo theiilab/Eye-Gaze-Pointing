@@ -1,0 +1,243 @@
+<html>
+    <head>
+        <link href="css/styles.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="d3/d3.v2.js"></script>
+		<script type="text/javascript" src="d3/lib/jquery/jquery.min.js"></script>
+	    <script type="text/javascript" src="d3/lib/jquery-ui/jquery-ui.min.js"></script>
+   <meta name="author" content="GazeRecorder">
+
+    <meta name="description" content="Accurate & Robust WebCam Online Eye-Tracking.  Eye tracking software provides valuable insights into where people are looking and how they use your site.">
+
+    <meta property="og:title" content="GazeCloudAPI | Cross-platform Real-Time Eye-Tracking">
+
+    <meta property="og:description" content="Accurate & Robust WebCam Online Eye-Tracking.">
+
+   <meta property="og:image" content="https://api.gazerecorder.com/gazecloudapi.png">
+
+    <meta property="og:url" content="https://api.gazerecorder.com">
+
+<meta name="twitter:description" content="Accurate & Robust WebCam Online Eye-Tracking.">
+<meta name="twitter:title" content="GazeCloudAPI | Cross-platform Real-Time Eye-Tracking">
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166140407-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-166140407-1');
+</script>
+
+
+
+
+<style>
+
+.buttonStartEyeTrack {
+
+
+
+    background-color: #F5F5F5;
+
+
+
+  border: none;
+
+
+
+  color: #F5F5F5;
+
+
+
+  padding: 15px 32px;
+
+
+
+  text-align: center;
+
+
+
+  text-decoration: none;
+
+
+
+  display: inline-block;
+
+
+
+  font-size: 16px;
+
+
+
+  margin: 4px 2px;
+
+
+
+  cursor: pointer;
+
+
+
+display: block; 
+
+
+
+margin:auto;
+
+
+
+font-size: 16px;
+
+
+
+border-radius: 1px;
+
+
+
+}
+
+input[type=checkbox] {
+   -moz-appearance:none;
+   -webkit-appearance:none;
+   -o-appearance:none;
+   outline: none;
+   content: none; 
+}
+
+input[type=checkbox]:before {
+   font-family: "FontAwesome";
+    content: "\f00c";
+    font-size: 15px;
+    color: transparent !important;
+    background: #F5F5F5;
+    display: block;
+    width: 15px;
+    height: 15px;
+    border: 1px #F5F5F5;
+    margin-right: 7px;
+}
+
+input[type=checkbox]:checked:before {
+
+   color: black !important;
+}
+</style>
+
+
+     
+
+ <script src="https://api.gazerecorder.com/GazeCloudAPI.js?v=1.2" ></script>
+
+ <script src="https://api.gazerecorder.com/heatmapLive.js" ></script>
+
+      <style type="text/css">
+         body {
+         overflow: hidden;
+         }
+      </style>
+      <script type = "text/javascript" >
+
+            
+         function PlotGaze(GazeData) {       
+         
+
+
+if( !document.getElementById("ShowHeatMapId").checked) // gaze plot
+{
+         var x = GazeData.docX;
+         var y = GazeData.docY;
+         
+         var gaze = document.getElementById("gaze");
+         x -= gaze .clientWidth/2;
+         y -= gaze .clientHeight/2;
+         
+         
+
+    gaze.style.left = x + "px";
+    gaze.style.top = y + "px";
+
+         
+         if(GazeData.state != 0)
+         {
+            if( gaze.style.display  == 'block')
+            gaze  .style.display = 'none';
+         }
+         else
+         {
+            if( gaze.style.display  == 'none')
+            gaze  .style.display = 'block';
+         }
+         
+}
+         }
+         
+         //////set callbacks/////////
+   
+
+window.addEventListener("load", function() {
+
+         GazeCloudAPI.OnCalibrationComplete =function(){ShowHeatMap(); console.log('gaze Calibration Complete')  }
+         GazeCloudAPI.OnCamDenied =  function(){ console.log('camera  access denied')  }
+         GazeCloudAPI.OnError =  function(msg){ console.log('err: ' + msg)  }
+         GazeCloudAPI.UseClickRecalibration = true;
+         GazeCloudAPI.OnResult = PlotGaze; 
+         });
+
+
+function handleClickHeatMap(cb) {
+ 
+if( cb.checked)
+{
+    ShowHeatMap();
+     document.getElementById("gaze").style.display = 'none';
+;
+
+}
+else
+     RemoveHeatMap()
+
+}
+
+     
+
+function start()
+{
+
+document.getElementById("startid").style.display = 'none';
+document.getElementById("stopid").style.display = 'block';
+
+GazeCloudAPI.StartEyeTracking(); 
+
+if(false)
+GazeCloudAPI.SetFps(15);
+}
+
+function stop()
+{
+
+document.getElementById("startid").style.display = 'block';
+document.getElementById("stopid").style.display = 'none';
+GazeCloudAPI.StopEyeTracking();
+}
+
+      </script>
+   </head>
+    <body>
+        <div id="test-area">
+            <div style="text-align: center;display: block" >
+
+<br>
+<button  id = 'startid' class = 'buttonStartEyeTrack'  type="button" onclick="start() ">Start eye tracking</button>
+      <button  id = 'stopid'  style= 'display:none' class = 'buttonStartEyeTrack'   type="button" onclick="stop();">Stop</button>
+      <div id ="gaze" style ='position: absolute;display:none;width: 60px;height: 60px;border-radius: 50%;border: solid 1px  rgba(255, 255,255, .2);  box-shadow: 0 0 100px 3px rgba(125, 125,125, .5);   pointer-events: none;   z-index: 999999'></div>
+
+<label for="ShowHeatMapId" >
+  <input id="ShowHeatMapId" type="checkbox" checked="" onclick='handleClickHeatMap(this);'>
+        </div>
+
+
+        <script type="text/javascript" src="js/fittslaw.js"></script>
+    </body>
+</html>
