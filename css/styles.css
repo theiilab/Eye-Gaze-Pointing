@@ -1,0 +1,20 @@
+/*
+    Styles for Fitts-law experiments
+*/
+.iso{
+    fill: #607d8b;
+    opacity: 0.5;
+}
+#test-area{
+/*    top: 50%;
+    left: 50%;*/
+    position: absolute;
+/*    margin-left: -310px;
+    margin-top: -200px;*/
+}
+.back{
+    fill: #F5F5F5;
+    /*stroke: #000;*/
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+}
